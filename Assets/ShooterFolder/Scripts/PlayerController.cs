@@ -55,11 +55,25 @@ public class PlayerController : MonoBehaviour
 
         characterController.Move(move * currentSpeed * Time.deltaTime);
 
-        // гравитация
         if (characterController.isGrounded && velocity.y < 0)
-            velocity.y = -2f; // небольшое прижатие к земле
+            velocity.y = -2f;
 
         velocity.y += _gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
+    }
+
+    public Vector3 CurrentVelocity
+    {
+        get
+        {
+            float moveX = Input.GetAxis("Horizontal");
+            float moveZ = Input.GetAxis("Vertical");
+            Vector3 move = transform.right * moveX + transform.forward * moveZ;
+
+            bool isRunning = Input.GetKey(KeyCode.LeftShift);
+            float currentSpeed = isRunning ? _speedRun : _speed;
+
+            return move.normalized * currentSpeed;
+        }
     }
 }
