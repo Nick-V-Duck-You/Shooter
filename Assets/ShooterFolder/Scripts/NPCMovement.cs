@@ -8,7 +8,7 @@ public class NPCMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerObject =  GameObject.FindWithTag("Player");
+        playerObject =  GameObject.FindWithTag("PlayerBody");
     }
 
     void Update()
@@ -17,5 +17,15 @@ public class NPCMovement : MonoBehaviour
       Vector3 targetPosition = playerObject.transform.position;
 
       transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+
+
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+         if (collision.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

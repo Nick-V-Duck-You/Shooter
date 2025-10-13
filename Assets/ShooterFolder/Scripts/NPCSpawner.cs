@@ -3,13 +3,12 @@ using UnityEngine;
 public class NPCSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject objectToSpawn;
+    [SerializeField] private GameObject spawner;
 
-    int i;
-    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        i = 0;
+        InvokeRepeating("Spawn", 2f, 5f); 
     }
 
     // Update is called once per frame
@@ -20,7 +19,6 @@ public class NPCSpawner : MonoBehaviour
 
     public void Spawn()
     {
-        Instantiate(objectToSpawn, new Vector3(i * 2.0f, 0, 0), Quaternion.identity);
-        i=i+1;
+        Instantiate(objectToSpawn, spawner.transform.position, Quaternion.identity);
     }
 }
