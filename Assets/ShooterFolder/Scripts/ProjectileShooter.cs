@@ -63,13 +63,22 @@ public class ProjectileShooter : MonoBehaviour
 
         GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
 
+        Collider playerCollider = playerController.GetComponent<CharacterController>();
+        Collider projectileCollider = projectile.GetComponent<Collider>();
+        if (playerCollider && projectileCollider)
+            Physics.IgnoreCollision(projectileCollider, playerCollider);
+
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         if (rb)
         {
             Vector3 velocity = ray.direction * shootForce;
 
             if (playerController != null)
-                velocity += playerController.CurrentVelocity;
+            {
+                Vector3 playerVelocity = playerController.CurrentVelocity;
+                float forwardSpeed = Vector3.Dot(playerVelocity, ray.direction);
+                velocity += ray.direction * forwardSpeed;
+            }
 
             rb.linearVelocity = velocity;
         }
