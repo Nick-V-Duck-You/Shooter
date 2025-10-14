@@ -4,6 +4,7 @@ public class NPCMovement : MonoBehaviour
 {
     public float speed = 5.0f;
     public GameObject playerObject;
+    public GameObject particleSystemObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,6 +27,12 @@ public class NPCMovement : MonoBehaviour
          if (collision.gameObject.CompareTag("Bullet"))
         {
             Destroy(this.gameObject);
+        }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Quaternion customRotation = Quaternion.Euler(-90f, 0f, 0f);
+            Destroy(this.gameObject);
+            Destroy(Instantiate(particleSystemObject, this.gameObject.transform.position, customRotation), 5);
         }
     }
 }
