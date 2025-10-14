@@ -30,6 +30,9 @@ public class ProjectileShooter : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetMouseButtonDown(1))
+            ToggleFireMode();
+
         switch (fireMode)
         {
             case FireMode.Single:
@@ -42,6 +45,12 @@ public class ProjectileShooter : MonoBehaviour
                     TryShoot();
                 break;
         }
+    }
+
+    void ToggleFireMode()
+    {
+        fireMode = (fireMode == FireMode.Single) ? FireMode.Auto : FireMode.Single;
+        Debug.Log("Fire mode switched to: " + fireMode);
     }
 
     void TryShoot()
