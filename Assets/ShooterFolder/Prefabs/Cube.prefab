@@ -125,6 +125,7 @@ MonoBehaviour:
   speed: 5
   playerObject: {fileID: 0}
   particleSystemObject: {fileID: 4549360407898957535, guid: dc24b517a07fbe746aba0c7a23aa9eb8, type: 3}
+  waypoints: []
 --- !u!54 &-867329939180879023
 Rigidbody:
   m_ObjectHideFlags: 0
