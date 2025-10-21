@@ -3,10 +3,9 @@ using UnityEngine;
 public class NPCMovement : MonoBehaviour
 {
     public GameObject playerObject;
-    public GameObject particleSystemObject;
     public Transform[] waypoints;
 
-    public float speed = 5.0f;
+    private float speed;
     public float viewDistance = 10f;
     public float viewAngle = 60f;
 
@@ -14,16 +13,12 @@ public class NPCMovement : MonoBehaviour
     private int direction = 1;
     private bool chasingPlayer = false;
 
-    public GameObject canvas;
-    public int damage;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
         playerObject = GameObject.FindWithTag("PlayerBody");
-
-        canvas = GameObject.FindWithTag("Canvas");
+        speed = this.gameObject.GetComponent<EnemyStats>().speed;
     }
 
     void Update()
@@ -99,28 +94,4 @@ public class NPCMovement : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
     }
 
-
-
-    void OnCollisionEnter(Collision collision)
-    {
-         if (collision.gameObject.CompareTag("Bullet"))
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Vector3 pos = transform.position;
-            Quaternion customRotation = Quaternion.Euler(-90f, 0f, 0f);
-            Destroy(this.gameObject);
-            Destroy(Instantiate(particleSystemObject, this.gameObject.transform.position, customRotation), 5);
-
-            damage = 10;
-            var playerHealth = canvas.GetComponent<PlayerHealth>();
-            canvas.GetComponent<PlayerHealth>().damage = damage;
-            playerHealth.GetDamage();
-
-            return;
-        }
-    }
 }
