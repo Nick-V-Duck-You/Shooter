@@ -14,11 +14,16 @@ public class NPCMovement : MonoBehaviour
     private int direction = 1;
     private bool chasingPlayer = false;
 
+    public GameObject canvas;
+    public int damage;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
     {
         playerObject = GameObject.FindWithTag("PlayerBody");
+
+        canvas = GameObject.FindWithTag("Canvas");
     }
 
     void Update()
@@ -109,6 +114,12 @@ public class NPCMovement : MonoBehaviour
             Quaternion customRotation = Quaternion.Euler(-90f, 0f, 0f);
             Destroy(this.gameObject);
             Destroy(Instantiate(particleSystemObject, this.gameObject.transform.position, customRotation), 5);
+
+            damage = 10;
+            var playerHealth = canvas.GetComponent<PlayerHealth>();
+            canvas.GetComponent<PlayerHealth>().damage = damage;
+            playerHealth.GetDamage();
+
             return;
         }
     }
