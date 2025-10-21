@@ -3785,9 +3785,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 5554983079849757522, guid: 68024e600ae826f449477553865ae5bd, type: 3}
-  shootForce: 70
+  shootForce: 50
   spawnDistance: 1
-  fireRate: 10
+  fireRate: 4
   fireMode: 1
   playerController: {fileID: 1669225188}
 --- !u!1 &1799675026
