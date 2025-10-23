@@ -20,12 +20,18 @@ public class ProjectileShooter : MonoBehaviour
     [Header("Player Rigidbody")]
     public PlayerController playerController;
 
+    public GameObject canvas;
+
     private float nextShootTime = 0f;
 
 
     void OnValidate()
     {
         fireRate = Mathf.Round(fireRate);
+    }
+
+    void Start(){
+        canvas = GameObject.FindWithTag("Canvas");
     }
 
     void Update()
@@ -70,26 +76,36 @@ public class ProjectileShooter : MonoBehaviour
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 spawnPos = ray.origin + ray.direction * spawnDistance;
 
-        GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
-
-        Collider playerCollider = playerController.GetComponent<CharacterController>();
-        Collider projectileCollider = projectile.GetComponent<Collider>();
-        if (playerCollider && projectileCollider)
-            Physics.IgnoreCollision(projectileCollider, playerCollider);
-
-        Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        if (rb)
+        if (canvas.GetComponent<PlayerStats>().ammo >0)
         {
-            Vector3 velocity = ray.direction * shootForce;
 
-            if (playerController != null)
+            GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+
+            Collider playerCollider = playerController.GetComponent<CharacterController>();
+            Collider projectileCollider = projectile.GetComponent<Collider>();
+            if (playerCollider && projectileCollider)
+                Physics.IgnoreCollision(projectileCollider, playerCollider);
+
+            Rigidbody rb = projectile.GetComponent<Rigidbody>();
+            if (rb)
             {
-                Vector3 playerVelocity = playerController.CurrentVelocity;
-                float forwardSpeed = Vector3.Dot(playerVelocity, ray.direction);
-                velocity += ray.direction * forwardSpeed;
+                Vector3 velocity = ray.direction * shootForce;
+
+                if (playerController != null)
+                {
+                    Vector3 playerVelocity = playerController.CurrentVelocity;
+                    float forwardSpeed = Vector3.Dot(playerVelocity, ray.direction);
+                    velocity += ray.direction * forwardSpeed;
+                }
+
+                rb.linearVelocity = velocity;
             }
 
-            rb.linearVelocity = velocity;
+            canvas.GetComponent<PlayerStats>().ammo -= 1;
+        }
+        else 
+        {
+            Debug.Log("Out of ammo!");
         }
     }
 }
