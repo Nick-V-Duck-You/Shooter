@@ -36,6 +36,9 @@ public class ProjectileShooter : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsGameOver)
+            return;
+
         if (Input.GetMouseButtonDown(1))
             ToggleFireMode();
 
@@ -76,7 +79,8 @@ public class ProjectileShooter : MonoBehaviour
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 spawnPos = ray.origin + ray.direction * spawnDistance;
 
-        if (canvas.GetComponent<PlayerStats>().ammo >0)
+        var stats = canvas.GetComponent<PlayerStats>();
+        if (stats.ammo > 0)
         {
 
             GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
@@ -101,7 +105,7 @@ public class ProjectileShooter : MonoBehaviour
                 rb.linearVelocity = velocity;
             }
 
-            canvas.GetComponent<PlayerStats>().ammo -= 1;
+            stats.UseAmmo(1);
         }
         else 
         {

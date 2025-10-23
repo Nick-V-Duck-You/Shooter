@@ -20,8 +20,13 @@ public class EnemyDeath : MonoBehaviour
     {
          if (collision.gameObject.CompareTag("Bullet"))
         {
-            health-=1;
-            if (health == 0){
+            var playerStats = canvas.GetComponent<PlayerStats>();
+            int bulletDamage = playerStats.damage;
+
+            health -= bulletDamage;
+            Debug.Log($"{gameObject.name} получил {bulletDamage} урона. Осталось HP: {health}");
+
+            if (health <= 0){
                 Destroy(this.gameObject);
             }
             return;

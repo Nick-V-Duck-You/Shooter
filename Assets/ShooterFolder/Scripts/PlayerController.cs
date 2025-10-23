@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private float rotationX;
     private Vector3 velocity;
     Vector3 move;
+    private bool isActive = true;
 
     void Start()
     {
@@ -26,6 +27,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (!isActive) return;
+
         Rotate();
         Move();
     }
@@ -75,5 +78,9 @@ public class PlayerController : MonoBehaviour
 
             return move.normalized * currentSpeed;
         }
+    }
+    public void SetActive(bool active)
+    {
+        isActive = active;
     }
 }
