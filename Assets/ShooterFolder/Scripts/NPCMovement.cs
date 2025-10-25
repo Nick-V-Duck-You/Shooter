@@ -6,12 +6,16 @@ public class NPCMovement : MonoBehaviour
     public Transform[] waypoints;
 
     private float speed;
-    public float viewDistance = 10f;
-    public float viewAngle = 60f;
+    public float viewDistance = 20f;
+    public float viewAngle = 180f;
+    public float eyeHeight = 0.3f;
 
     private int currentWaypointIndex = 0;
     private int direction = 1;
     private bool chasingPlayer = false;
+
+    public float memoryDuration = 3f;
+    private float lastTimePlayerSeen = -Mathf.Infinity;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -26,33 +30,45 @@ public class NPCMovement : MonoBehaviour
         if (playerObject == null)
             return;
 
+        Vector3 eyes = transform.position + Vector3.up * eyeHeight;
         Vector3 toPlayer = playerObject.transform.position - transform.position;
         float distanceToPlayer = toPlayer.magnitude;
         bool playerVisible = false;
 
         // Check if the NPC can see the player
-        if (distanceToPlayer < viewDistance)
+        if (distanceToPlayer <= viewDistance)
         {
             Vector3 dirToPlayer = toPlayer.normalized;
             float dot = Vector3.Dot(transform.forward, dirToPlayer);
+
             if (dot > Mathf.Cos(viewAngle * 0.5f * Mathf.Deg2Rad))
-                playerVisible = true;
+            {
+                if (Physics.Raycast(eyes, dirToPlayer, out RaycastHit hit, viewDistance))
+                {
+                    if (hit.collider.CompareTag("PlayerBody") || hit.collider.CompareTag("Player"))
+                    {
+                        playerVisible = true;
+                        lastTimePlayerSeen = Time.time;
+                    }
+                }
+            }
         }
+
+        bool recentlySeen = Time.time - lastTimePlayerSeen <= memoryDuration;
 
         // Start chasing the player when detected
-        if (!chasingPlayer && playerVisible)
+        if (!chasingPlayer && (playerVisible || recentlySeen))
         {
             chasingPlayer = true;
-            Debug.Log($"[{name}] Player detected!");
-        }
-        // Stop chasing when the player is out of sight
-        else if (chasingPlayer && !playerVisible && distanceToPlayer > viewDistance)
-        {
-            chasingPlayer = false;
-            Debug.Log($"[{name}] Lost sight of the Player.");
+            Debug.Log($"[{name}] Начал преследовать игрока!");
         }
 
-        // Move depending on the current state
+        if (chasingPlayer && !playerVisible && !recentlySeen)
+        {
+            chasingPlayer = false;
+            Debug.Log($"[{name}] Потерял игрока из виду.");
+        }
+
         if (chasingPlayer)
             MoveTo(playerObject.transform.position);
         else
@@ -62,7 +78,7 @@ public class NPCMovement : MonoBehaviour
     // Handles waypoint patrol movement
     void Patrol()
     {
-        if (waypoints.Length == 0) return;
+        if (waypoints == null || waypoints.Length == 0) return;
 
         MoveTo(waypoints[currentWaypointIndex].position);
 
@@ -94,4 +110,23 @@ public class NPCMovement : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
     }
 
+    //visible only in scene mode
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Vector3 eyes = transform.position + Vector3.up * eyeHeight;
+
+        // Central ray
+        Gizmos.DrawLine(eyes, eyes + transform.forward * viewDistance);
+
+        // Edges of the angle
+        Vector3 leftBoundary = Quaternion.Euler(0, -viewAngle / 2, 0) * transform.forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, viewAngle / 2, 0) * transform.forward;
+        Gizmos.DrawLine(eyes, eyes + leftBoundary * viewDistance);
+        Gizmos.DrawLine(eyes, eyes + rightBoundary * viewDistance);
+
+        // Radius
+        Gizmos.color = new Color(1, 1, 0, 0.1f);
+        Gizmos.DrawWireSphere(eyes, viewDistance);
+    }
 }

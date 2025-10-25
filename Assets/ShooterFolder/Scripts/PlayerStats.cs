@@ -11,12 +11,28 @@ public class PlayerStats : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private Text healthText;
     [SerializeField] private Text ammoText;
+    [SerializeField] private Text killText;
+
+    private int killCount = 0;
+    private bool isInvincible = false;
+    private float invincibleTimer = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         UpdateHealthUI();
         UpdateAmmoUI();
+        UpdateKillUI();
+    }
+
+    void Update()
+    {
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer <= 0f)
+                DisableInvincibility();
+        }
     }
 
     private void UpdateHealthUI()
@@ -31,6 +47,23 @@ public class PlayerStats : MonoBehaviour
             ammoText.text = $"Ammo: {ammo}";
     }
 
+    private void UpdateKillUI()
+    {
+        if (killText)
+            killText.text = $"Kills: {killCount}";
+    }
+
+    public void AddKill()
+    {
+        killCount++;
+        UpdateKillUI();
+    }
+
+    public int GetKillCount()
+    {
+        return killCount;
+    }
+
     public void UseAmmo(int count)
     {
         ammo = Mathf.Max(0, ammo - count);
@@ -38,6 +71,8 @@ public class PlayerStats : MonoBehaviour
     }
     public void GetDamage()
     {
+        if (isInvincible) return;
+
         health -= damage;
         if (health < 0)
             health = 0;
@@ -48,9 +83,21 @@ public class PlayerStats : MonoBehaviour
             Die();
     }
 
+    public void EnableInvincibility(float duration)
+    {
+        isInvincible = true;
+        invincibleTimer = duration;
+        Debug.Log("INVINCIBLE!");
+    }
+
+    private void DisableInvincibility()
+    {
+        isInvincible = false;
+        invincibleTimer = 0f;
+        Debug.Log("LOH!");
+    }
     private void Die()
     {
-        Debug.Log("Player is dead!");
         GameManager.Instance.GameOver();
     }
 

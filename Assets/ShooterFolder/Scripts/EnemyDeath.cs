@@ -27,6 +27,7 @@ public class EnemyDeath : MonoBehaviour
             Debug.Log($"{gameObject.name} получил {bulletDamage} урона. Осталось HP: {health}");
 
             if (health <= 0){
+                playerStats.AddKill();
                 Destroy(this.gameObject);
             }
             return;
