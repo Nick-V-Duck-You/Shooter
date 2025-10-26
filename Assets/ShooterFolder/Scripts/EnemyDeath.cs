@@ -39,10 +39,10 @@ public class EnemyDeath : MonoBehaviour
             Destroy(this.gameObject);
             Destroy(Instantiate(particleSystemObject, this.gameObject.transform.position, customRotation), 5);
 
-            damage = this.gameObject.GetComponent<EnemyStats>().damage;
-            var playerHealth = canvas.GetComponent<PlayerStats>();
-            canvas.GetComponent<PlayerStats>().damage = damage;
-            playerHealth.GetDamage();
+            var enemyStats = GetComponent<EnemyStats>();
+            var playerStats = canvas.GetComponent<PlayerStats>();
+
+            playerStats.GetDamage(enemyStats.damage);
 
             return;
         }

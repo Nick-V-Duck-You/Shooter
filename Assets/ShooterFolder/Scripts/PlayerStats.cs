@@ -69,11 +69,11 @@ public class PlayerStats : MonoBehaviour
         ammo = Mathf.Max(0, ammo - count);
         UpdateAmmoUI();
     }
-    public void GetDamage()
+    public void GetDamage(int enemyDamage)
     {
         if (isInvincible) return;
 
-        health -= damage;
+        health -= enemyDamage;
         if (health < 0)
             health = 0;
 
