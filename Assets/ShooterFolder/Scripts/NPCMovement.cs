@@ -70,7 +70,7 @@ public class NPCMovement : MonoBehaviour
         }
 
         if (chasingPlayer)
-            MoveTo(playerObject.transform.position);
+            MoveTo(playerObject.transform.position - new Vector3(0.0f, 1.0f, 0.0f));
         else
             Patrol();
     }

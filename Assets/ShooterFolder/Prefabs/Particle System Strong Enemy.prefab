@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2705559515768878011}
   - component: {fileID: 942022142961822894}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Particle System Strong Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4780,7 +4780,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6c294077e1aa8cf4d969997dc5495b28, type: 2}
+  - {fileID: 2100000, guid: e9fd38fe5f98f8848927da79b7ef5962, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

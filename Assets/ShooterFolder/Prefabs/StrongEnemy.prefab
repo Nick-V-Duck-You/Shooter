@@ -132,6 +132,8 @@ MonoBehaviour:
   - {fileID: 0}
   viewDistance: 10
   viewAngle: 60
+  eyeHeight: 0.3
+  memoryDuration: 3
 --- !u!114 &565016776510087120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 329ea7a17751dc546a5f945b9da652b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystemObject: {fileID: 4549360407898957535, guid: dc24b517a07fbe746aba0c7a23aa9eb8, type: 3}
+  particleSystemObject: {fileID: 4549360407898957535, guid: 2fe54721cb4b230409b1b101c9576a1e, type: 3}
   canvas: {fileID: 0}
 --- !u!114 &228991673593956116
 MonoBehaviour:
